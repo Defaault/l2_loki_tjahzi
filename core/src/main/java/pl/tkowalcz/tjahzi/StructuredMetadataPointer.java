@@ -46,10 +46,11 @@ public class StructuredMetadataPointer {
         return result;
     }
 
-    public String getStringAscii() {
-        String stringAscii = buffer.getStringAscii(index);
-        index += stringAscii.length() + Integer.BYTES;
+    public String getStringUtf8() {
+        int byteLength = buffer.getInt(index);
+        String result = buffer.getStringUtf8(index);
+        index += byteLength + Integer.BYTES;
 
-        return stringAscii;
+        return result;
     }
 }

@@ -39,8 +39,8 @@ public class EntrySerializer {
 
         for (int i = 0; i < labelsCount; i++) {
             target.writeByte(STRUCTURED_METADATA_FIELD_NUMBER << 3 | LENGTH_DELIMITED_TYPE);
-            String name = pointer.getStringAscii();
-            String value = pointer.getStringAscii();
+            String name = pointer.getStringUtf8();
+            String value = pointer.getStringUtf8();
 
             LabelSerializer.serialize(name, value, target);
         }

@@ -1,6 +1,7 @@
 package pl.tkowalcz.tjahzi.protobuf;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufUtil;
 
 import java.nio.charset.StandardCharsets;
 
@@ -12,8 +13,9 @@ public class StringSerializer {
             CharSequence logLine,
             ByteBuf target
     ) {
-        writeUnsignedVarint(logLine.length(), target);
-        target.writeCharSequence(logLine, StandardCharsets.US_ASCII);
+        int utf8Bytes = ByteBufUtil.utf8Bytes(logLine);
+        writeUnsignedVarint(utf8Bytes, target);
+        target.writeCharSequence(logLine, StandardCharsets.UTF_8);
     }
 
     public static void serialize(

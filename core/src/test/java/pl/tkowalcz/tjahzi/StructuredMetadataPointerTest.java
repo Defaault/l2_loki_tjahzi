@@ -88,18 +88,19 @@ public class StructuredMetadataPointerTest {
     }
 
     @Test
-    public void shouldGetStringAsciiCorrectly() {
+    public void shouldGetStringUtf8Correctly() {
         // Given
         int index = 0;
         String value = "test";
-        buffer.putStringAscii(index, value);
-        pointer.wrap(buffer, index, value.length() + Integer.BYTES);
+        buffer.putStringUtf8(index, value);
+        int byteLength = buffer.getInt(index);
+        pointer.wrap(buffer, index, byteLength + Integer.BYTES);
 
         // When
-        String result = pointer.getStringAscii();
+        String result = pointer.getStringUtf8();
 
         // Then
         assertThat(result).isEqualTo(value);
-        assertThat(pointer.getIndex()).isEqualTo(index + value.length() + Integer.BYTES);
+        assertThat(pointer.getIndex()).isEqualTo(index + byteLength + Integer.BYTES);
     }
 }

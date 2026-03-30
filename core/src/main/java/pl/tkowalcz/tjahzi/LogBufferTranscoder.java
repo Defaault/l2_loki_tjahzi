@@ -88,9 +88,16 @@ public class LogBufferTranscoder {
         index += Integer.BYTES;
 
         for (int i = 0; i < labelsCount; i++) {
-            index += buffer.getStringAscii(index, labelsBuilder, ByteOrder.LITTLE_ENDIAN) + Integer.BYTES;
+            int nameByteLength = buffer.getInt(index, ByteOrder.LITTLE_ENDIAN);
+            labelsBuilder.append(buffer.getStringUtf8(index, ByteOrder.LITTLE_ENDIAN));
+            index += Integer.BYTES + nameByteLength;
+
             labelsBuilder.append("=").append("\"");
-            index += buffer.getStringAscii(index, labelsBuilder, ByteOrder.LITTLE_ENDIAN) + Integer.BYTES;
+
+            int valueByteLength = buffer.getInt(index, ByteOrder.LITTLE_ENDIAN);
+            labelsBuilder.append(buffer.getStringUtf8(index, ByteOrder.LITTLE_ENDIAN));
+            index += Integer.BYTES + valueByteLength;
+
             labelsBuilder.append("\",");
         }
 

@@ -35,11 +35,13 @@ public class LabelSerializerAssert extends AbstractAssert<LabelSerializerAssert,
         Map<String, String> result = new HashMap<>();
 
         for (int i = 0; i < labelsCount; i++) {
-            String name = buffer.getStringAscii(index);
-            index += name.length() + Integer.BYTES;
+            int nameByteLength = buffer.getInt(index);
+            String name = buffer.getStringUtf8(index);
+            index += Integer.BYTES + nameByteLength;
 
-            String value = buffer.getStringAscii(index);
-            index += value.length() + Integer.BYTES;
+            int valueByteLength = buffer.getInt(index);
+            String value = buffer.getStringUtf8(index);
+            index += Integer.BYTES + valueByteLength;
 
             result.put(name, value);
         }

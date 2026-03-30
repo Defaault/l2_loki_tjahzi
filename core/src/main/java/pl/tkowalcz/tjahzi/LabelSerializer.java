@@ -29,7 +29,7 @@ public class LabelSerializer {
     }
 
     public LabelSerializer appendLabelName(String key) {
-        cursor += buffer.putStringAscii(cursor, key, ByteOrder.LITTLE_ENDIAN);
+        cursor += buffer.putStringUtf8(cursor, key, ByteOrder.LITTLE_ENDIAN);
         labelsCount++;
 
         return this;
@@ -43,7 +43,7 @@ public class LabelSerializer {
     }
 
     public LabelSerializer appendPartialLabelValue(CharSequence value) {
-        cursor += buffer.putStringWithoutLengthAscii(cursor, value);
+        cursor += buffer.putStringWithoutLengthUtf8(cursor, value.toString());
 
         return this;
     }
@@ -115,7 +115,9 @@ public class LabelSerializer {
 
         int index = 0;
         while (index < cursor) {
-            index += buffer.getStringAscii(index, result, ByteOrder.LITTLE_ENDIAN) + Integer.BYTES;
+            int byteLength = buffer.getInt(index, ByteOrder.LITTLE_ENDIAN);
+            result.append(buffer.getStringUtf8(index, ByteOrder.LITTLE_ENDIAN));
+            index += Integer.BYTES + byteLength;
         }
 
         return result.toString();
