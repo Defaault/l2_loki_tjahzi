@@ -1,0 +1,28 @@
+name: Deploy to Repsy
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          server-id: repsy
+          server-username: REPSY_USER
+          server-password: REPSY_TOKEN
+
+      - name: Deploy to Repsy
+        run: mvn deploy -DskipTests --batch-mode
+        env:
+          REPSY_USER: ${{ secrets.REPSY_USER }}
+          REPSY_TOKEN: ${{ secrets.REPSY_TOKEN }}
